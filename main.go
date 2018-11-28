@@ -18,6 +18,8 @@ type Recipe struct{
 	ingredients string 	'json:"ingredients,omitempty"'
 }
 
+var recipes []Recipe
+
 func main() {
     fmt.Println("Recipes Truora")
     fmt.Println("Nicolas Vasquez Murcia")
@@ -45,8 +47,9 @@ func main() {
 
 }
 
-func create(int id, string imgURL, string description, string name, string ingredients)
+func create(writer http.ResponseWriter, request *http.Request)
 {
+	int id, string imgURL, string description, string name, string ingredients
 	// Insert two rows into the "accounts" table.
     if _, err := db.Exec(
         "INSERT INTO Cook.Recipes VALUES ("+id+"," name+","+imgURL+","+description+","+ingredients+")"; err != nil {
@@ -55,7 +58,7 @@ func create(int id, string imgURL, string description, string name, string ingre
 
 }
 
-func update(string fieldToUpdate, string name, string update)
+func update(writer http.ResponseWriter, request *http.Request)
 {
 	if _, err := db.Exec(
         "UPDATE Cook.Recipes SET "+fieldToUpdate+"="+update+"where name="+name; err != nil {
@@ -63,42 +66,28 @@ func update(string fieldToUpdate, string name, string update)
     })
 }
 
-func readAll()
+func readAll(writer http.ResponseWriter, request *http.Request)
 {
     rows, err := db.Query("SELECT * FROM Book.Recipes")
     if err != nil {
         log.Fatal(err)
     }
     defer rows.Close()
-    fmt.Println("Initial balances:")
+
     for rows.Next() {
-        var id, balance int
-        if err := rows.Scan(&id, &balance); err != nil {
+        var id int, imgURL,name, description,ingredients string
+        if err := rows.Scan(&id, &imgURL, &name, &description, &ingredients); err != nil {
             log.Fatal(err)
         }
-        fmt.Printf("%d %d\n", id, balance)
+        var rec = Recipe{id: id, name:name, imgURL: imgURL, description:description, ingredients:ingredients}
+        recipes.append(recipes, rec)
     }
+    json.NewEncoder(writer).Encode(recipes)
 }
 
-func read()
+func read(writer http.ResponseWriter, request *http.Request)
 {
-    rows, err := db.Query("SELECT * FROM Book.Recipes")
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer rows.Close()
-    fmt.Println("Initial balances:")
-    for rows.Next() {
-        var id, balance int
-        if err := rows.Scan(&id, &balance); err != nil {
-            log.Fatal(err)
-        }
-        fmt.Printf("%d %d\n", id, balance)
-    }
-}
-
-func read()
-{
+	param:=
     rows, err := db.Query("SELECT * FROM Book.Recipes")
     if err != nil {
         log.Fatal(err)
@@ -113,7 +102,7 @@ func read()
     }
 }
 
-func search(string name)
+func search(writer http.ResponseWriter, request *http.Request)
 {
     rows, err := db.Query("SELECT * FROM Book.Recipes WHERE name LIKE "+"U+0025"+NAME+"U+0025")
     if err != nil {
@@ -130,7 +119,7 @@ func search(string name)
     }
 }
 
-func delete(string name)
+func delete(writer http.ResponseWriter, request *http.Request)
 {
 	if _, err := db.Exec(
         "Delete * from Cook.Recipes where name ="+name; err != nil {
