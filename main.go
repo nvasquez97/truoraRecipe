@@ -7,9 +7,10 @@ import ("fmt"
 	"github.com/lib/pq"
     "github.com/gorilla/mux"
 	)
-
+//Conexion con CockroachDB
 var db sql.DB
 
+// Tipo de objeto receta
 type Recipe struct{
 	id 			int 	'json:"id,omitempty"'
 	name 		string 	'json:"name,omitempty"'
@@ -20,6 +21,9 @@ type Recipe struct{
 
 var recipes []Recipe
 
+/*
+* Metodo principal para ejecutar
+*/ 
 func main() {
     fmt.Println("Recipes Truora")
     fmt.Println("Nicolas Vasquez Murcia")
@@ -33,10 +37,10 @@ func main() {
     router.HandleFunc("/recipe/{id}", DeletePerson).Methods("DELETE")
     log.Fatal(http.ListenAndServe(":8000", router))
 
-    //Conectarse a la DB
+    //Conectarse a CockroachDB en puerto 26257 en la base de datos Cook
     db, err := sql.Open("postgres", "postgresql://maxroach@localhost:26257/Cook?sslmode=disable")
     if err != nil {
-        log.Fatal("error connecting to the database: ", err)
+        log.Fatal("Error connecting to the database: ", err)
     }
 
     // Crear la tabla de recetas
@@ -46,26 +50,40 @@ func main() {
     }
 
 }
-
+/*
+*Metodo para realizar PUT de una nueva receta
+*/
 func create(writer http.ResponseWriter, request *http.Request)
 {
-	int id, string imgURL, string description, string name, string ingredients
+	param:= mux.Vars(request)
+	var rec Recipe
+	_ = json.NewDecoder(request.Body).Decode(&person)
+	rec.id = 99
+	recipes.append(recipes, rec)
+	
 	// Insert two rows into the "accounts" table.
     if _, err := db.Exec(
-        "INSERT INTO Cook.Recipes VALUES ("+id+"," name+","+imgURL+","+description+","+ingredients+")"; err != nil {
+        "INSERT INTO Cook.Recipes VALUES ("+rec.id+","+rec.name+","+rec.imgURL+","+rec.description+","+rec.ingredients+")"; err != nil {
         log.Fatal(err)
     })
-
+    json.NewEncoder(writer).Encode(recipes)
 }
 
+/*
+*Metodo para realizar POST de una receta y actualizarla
+*/
 func update(writer http.ResponseWriter, request *http.Request)
 {
+	param:= mux.Vars(request)
 	if _, err := db.Exec(
         "UPDATE Cook.Recipes SET "+fieldToUpdate+"="+update+"where name="+name; err != nil {
         log.Fatal(err)
     })
 }
 
+/*
+*Metodo para hacer GET de todas las recetas
+*/
 func readAll(writer http.ResponseWriter, request *http.Request)
 {
     rows, err := db.Query("SELECT * FROM Book.Recipes")
@@ -85,15 +103,18 @@ func readAll(writer http.ResponseWriter, request *http.Request)
     json.NewEncoder(writer).Encode(recipes)
 }
 
+/*
+*Metodo para hacer GET de una receta por ID
+*/
 func read(writer http.ResponseWriter, request *http.Request)
 {
 	param:=
-    rows, err := db.Query("SELECT * FROM Book.Recipes")
+    rows, err := db.Query("SELECT * FROM Cook.Recipes")
     if err != nil {
         log.Fatal(err)
     }
     defer rows.Close()
-    fmt.Println("Initial balances:")
+
     for rows.Next() {
         var id, imgURL,name, description,ingredients int
         if err := rows.Scan(&id, &imgURL, &name, &description, &ingredients); err != nil {
@@ -102,6 +123,9 @@ func read(writer http.ResponseWriter, request *http.Request)
     }
 }
 
+/*
+*Metodo para hacer GET de recetas por nombre
+*/
 func search(writer http.ResponseWriter, request *http.Request)
 {
     rows, err := db.Query("SELECT * FROM Book.Recipes WHERE name LIKE "+"U+0025"+NAME+"U+0025")
@@ -119,6 +143,9 @@ func search(writer http.ResponseWriter, request *http.Request)
     }
 }
 
+/*
+* Metodo para hacer DELETE de una receta por ID
+*/
 func delete(writer http.ResponseWriter, request *http.Request)
 {
 	if _, err := db.Exec(
