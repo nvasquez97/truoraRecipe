@@ -2,9 +2,14 @@
   "name": "truoraRecipe",
   "version": "1.0.0",
   "description": "CRUD de recetas utilizando Golang, CrockroachDB y Vue.js con el template de bootstrap-vue.js",
-  "main": "index.js",
+  "main": "server.js",
+  "author": "",
   "dependencies": {
-    "vue": "^2.5.17"
+    "body-parser": "^1.5.2",
+    "express": "~4.7.2",
+    "vue": "^2.5.17",
+    "axios": "^0.16.2",
+    "vue-axios": "^2.0.2"
   },
   "devDependencies": {},
   "scripts": {
@@ -15,7 +20,6 @@
     "url": "git+https://github.com/nvasquez97/truoraRecipe.git"
   },
   "keywords": [],
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nvasquez97/truoraRecipe/issues"
