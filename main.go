@@ -15,11 +15,11 @@ var dbCKDB *sql.DB
 
 // Tipo de objeto receta
 type Recipe struct{
-	id int `json:"id,omitempty"`
-	name string `json:"name,omitempty"`
-	imgURL string `json:"imgURL,omitempty"`
-	description string `json:"description,omitempty"`
-	ingredients string `json:"ingredients,omitempty"`
+	Id int `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+	ImgURL string `json:"imgURL,omitempty"`
+	Description string `json:"description,omitempty"`
+	Ingredients string `json:"ingredients,omitempty"`
 }
 
 var recipes []Recipe
@@ -60,20 +60,19 @@ func main() {
 *Metodo para realizar PUT de una nueva receta
 */
 func create(writer http.ResponseWriter, request *http.Request) {
-	//param:= mux.Vars(request)
 	var rec Recipe
 	_ = json.NewDecoder(request.Body).Decode(&rec)
     fmt.Println(request.Body)
     fmt.Println(request)
 	random:= rand.New(rand.NewSource(999))
-	rec.id =random.Intn(999999)
-	var idString = strconv.Itoa(rec.id)
+	rec.Id =random.Intn(999999)
+	var idString = strconv.Itoa(rec.Id)
 	recipes = append(recipes, rec)
 	
 	// Insert two rows into the "accounts" table.
-    if rec.name != ""{
+    if rec.Name != ""{
         if _, err := dbCKDB.Exec(
-        "INSERT INTO Cook.Recipes VALUES ("+idString+",'"+rec.name+"','"+rec.imgURL+"','"+rec.description+"','"+rec.ingredients+"')"); err != nil {
+        "INSERT INTO Cook.Recipes VALUES ("+idString+",'"+rec.Name+"','"+rec.ImgURL+"','"+rec.Description+"','"+rec.Ingredients+"')"); err != nil {
         log.Fatal(err)
         }    
     }
@@ -86,22 +85,28 @@ func create(writer http.ResponseWriter, request *http.Request) {
 func update(writer http.ResponseWriter, request *http.Request) {
 	param:= mux.Vars(request)
 	idU := param["id"]
-	var rec Recipe
+    var rec Recipe
 	_ = json.NewDecoder(request.Body).Decode(&rec)
-    fmt.Println(rec)
 	recid, err := strconv.Atoi(idU)
 	if err!= nil {
 		log.Fatal(err)
 	}
-	rec.id=recid
+	rec.Id=recid
 	recipes = append(recipes, rec)
-
-	if _, err := dbCKDB.Exec(
-        "UPDATE Cook.Recipes SET name="+"'"+rec.name+"'"+", description='"+rec.description+"'"+
-        ", imgurl='"+rec.imgURL+"', ingredients='"+rec.ingredients+"' where id="+idU); err != nil {
+    if rec.Name!= ""{
+        if _, err := dbCKDB.Exec(
+        "UPDATE Cook.Recipes SET name="+"'"+rec.Name+"'"+", description='"+rec.Description+"'"+
+        ", imgurl='"+rec.ImgURL+"', ingredients='"+rec.Ingredients+"' where id="+idU); err != nil {
         log.Fatal(err)
+        }
+        json.NewEncoder(writer).Encode(rec)    
+    } else {
+        rec = Recipe{Id: 1, Name:"Hello", ImgURL: "URL", Description:"description", Ingredients:"ingredients"}
+        //json.NewEncoder(writer).Encode(rec)
+        writer.WriteHeader(http.StatusInternalServerError)
+        writer.Write([]byte("Hubo un error actualizando la receta porque los datos están vacíos"))
     }
-	json.NewEncoder(writer).Encode(recipes)
+	
 }
 
 /*
@@ -121,18 +126,18 @@ func readAll(writer http.ResponseWriter, request *http.Request) {
         if err := rows.Scan(&id, &name, &imgURL, &description, &ingredients); err != nil {
             log.Fatal(err)
         }
-        var rec = Recipe{id: id, name:name, imgURL: imgURL, description:description, ingredients:ingredients}
+        var rec = Recipe{Id: id, Name:name, ImgURL: imgURL, Description:description, Ingredients:ingredients}
         recipes=append(recipes, rec)
     }
     if recipes != nil {
         json.NewEncoder(writer).Encode(recipes)
     } else {
-        
+        writer.Write([]byte("No hay recetas en el momento"))
     }
 }
 
 /*
-*Metodo para hacer GET de una receta por ID
+*Metodo para hacer GET de una receta por Id
 */
 func read(writer http.ResponseWriter, request *http.Request) {
 	param:=mux.Vars(request)
@@ -150,11 +155,11 @@ func read(writer http.ResponseWriter, request *http.Request) {
         if err := rows.Scan(&id, &name, &imgURL, &description, &ingredients); err != nil {
             log.Fatal(err)
         }
-        var rec = Recipe{id: id, name:name, imgURL: imgURL, description:description, ingredients:ingredients}
-        fmt.Println(rec)
-        recipes = append(recipes, rec)
+        var rec = Recipe{Id: id, Name:name, ImgURL: imgURL, Description:description, Ingredients:ingredients}
+        json.NewEncoder(writer).Encode(rec)
     }
-    json.NewEncoder(writer).Encode(recipes)
+
+    //json.NewEncoder(writer).Encode(rec)
 }
 
 /*
@@ -177,7 +182,7 @@ func search(writer http.ResponseWriter, request *http.Request) {
         if err := rows.Scan(&id, &imgURL, &name, &description, &ingredients); err != nil {
             log.Fatal(err)
         }
-        var rec = Recipe{id: id, name:name, imgURL: imgURL, description:description, ingredients:ingredients}
+        var rec = Recipe{Id: id, Name:name, ImgURL: imgURL, Description:description, Ingredients:ingredients}
         recipes=append(recipes, rec)
         fmt.Println(rec)
     }
@@ -185,7 +190,7 @@ func search(writer http.ResponseWriter, request *http.Request) {
 }
 
 /*
-* Metodo para hacer DELETE de una receta por ID
+* Metodo para hacer DELETE de una receta por Id
 */
 func deleteR(writer http.ResponseWriter, request *http.Request) {
 	param:=mux.Vars(request)
