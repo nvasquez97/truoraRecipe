@@ -43,19 +43,26 @@
   export default {
     data() {
       return {
-        todo: '',
-        typing: false,
+        recipe: '',
       }
     },
     methods: {
-      addRecipe(event) {
-        if (event) event.preventDefault();
-        let url = 'http://localhost:9000/api/add';
+      addRecipe() {
+        let url = 'http://localhost:8000/recipe/';
         let param = {
-          name: this.todo,
+          name: ,,
+          imgURL:,
+          description:,
+          instructions:,
+          ingredients:,
           done: 0
       };
-        axios.post(url, param).then((response) => {
+        axios.post(url, param, {
+          headers: {
+            'Content-Type':'application/json'
+            //'Content-Type':'multipart/form-data'
+          }
+        }).then((response) => {
           console.log(response);
           this.clearTodo();
           this.refreshTodo();
@@ -64,11 +71,11 @@
           console.log(error);
         })
       },
-      clearTodo() {
-        this.todo = '';
+      clear() {
+        this.name = '';
       },
-      refreshTodo() {
-        bus.$emit("refreshTodo")
+      refresh() {
+        bus.$emit("reloadRecipes")
       }
     }
   }
