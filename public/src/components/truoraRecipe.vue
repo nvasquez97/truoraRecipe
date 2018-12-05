@@ -2,8 +2,8 @@
   <div id="app">
     <div class="container">
       <div class="row col-md-6 offset-md-3">
-        <create-todo></create-todo>
-        <list-todo></list-todo>
+        <create-recipe></create-recipe>
+        <recipes></recipes>
       </div>
     </div>
   </div>
@@ -11,14 +11,14 @@
 
 
 <script>
-  import CreateTodo from './createRecipe.vue';
-  import ListTodo from './recipes.vue';
+  import CreateRecipe from './createRecipe.vue';
+  import Recipes from './recipes.vue';
   export default {
-    name: 'app',
+    name: 'truoraRecipe',
     data() {
       return {}
     },
-    components: {CreateTodo,  ListTodo},
+    components: {CreateRecipe,  Recipes},
   }
 </script>
 

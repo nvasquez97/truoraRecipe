@@ -56,7 +56,7 @@
     export default {
         data() {
             return {
-                todos: []
+                recipes: []
             }
         },
         created: function() { // get todo items and start listening to events once component is created
