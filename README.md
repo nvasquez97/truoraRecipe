@@ -1,7 +1,7 @@
 # truoraRecipe
-CRUD de recetas utilizando Golang, CrockroachDB y Vue.js con el template de bootstrap-vue.js
+CRUD de recetas utilizando Golang, CrockroachDB para el backend y VueJS con bootstrap-vue para el frontend
 
-##Instalar y correr el Backend:
+## Instalar y correr el Backend:
 
 #### CockRoachDB. 
 
@@ -35,7 +35,7 @@ npm install
 
 Hacer build con webpack
 ```
-`npm run build
+npm run build
 ```
 
 Ejecutar node
