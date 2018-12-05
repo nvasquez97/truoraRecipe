@@ -3,14 +3,14 @@
         <div class="col-md-12" v-show="recipes.length>0">
             <h3>Mira las recetas:</h3>
             <div id="accordion">
-            <div class="row mrb-10" v-for="todo in todos">
+            <div class="row mrb-10" v-for="recipe in recipes">
         <div class="card">
         <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
         <h5 class="mb-0">
             <p><a href="#" style="color:black">
-            Arroz con Pollo:
+            {recipe.name}
             </a>
-            Arroz con pollo y vegateles con color natural gracias a la cúrcuma.
+            {recipe.description}
             </p>
         </h5>
         </div>
@@ -22,16 +22,16 @@
                         <h6>
                         Ingredientes:
                         </h6>
-                        Arroz, Pollo, Vegetales
+                        {recipe.ingredients} 
                         <br>
                         <br>
                         <h6>
                         Instrucciones:
                         </h6>
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        {recipe.instructions}
                     </div>
                     <div class="col-md-4">
-                        <img class="img-fluid img-thumbnail" src="https://www.divinacocina.es/wp-content/uploads/ARROZ-CON-POLLO-2.jpg"/>
+                        <img class="img-fluid img-thumbnail" v-attr="src: recipe.imgURL"/>
                     </div>
                 </div>
             </div>
@@ -39,11 +39,11 @@
     </div>
     </div>
         </div>
-        <div class="row alert alert-info text-center" v-show="todos.length==0">
+        <div class="row alert alert-info text-center" v-show="recipes.length==0">
             <p class="alert alert-info">
-              <strong>All Caught Up</strong>
+              <strong>No tienes recetas aún</strong>
             <br/>
-            No hay ninguna receta aún</p>
+            ¡Agrega una!</p>
         </div>
     </div>
 </div>
@@ -59,35 +59,36 @@
                 recipes: []
             }
         },
-        created: function() { // get todo items and start listening to events once component is created
-            this.fetchTodo();
+        created: function() {
+            this.fetchRecipe();
             this.listenToEvents();
         },
         methods: {
-            fetchTodo() {
-                let uri = 'http://localhost:4000/api/all';
+            fetchRecipes() {
+                let uri = 'http://localhost:8000/recipes/';
                 axios.get(uri).then((response) => {
-                    this.todos = response.data;
+                    this.recipes = response.data;
                 });
             },
-            updateTodo(todo) {
-                let id = todo._id;
-                let uri = 'http://localhost:4000/api/update/' + id;
+            updateRecipe(recipe) {
+                let id = recipe._id;
+                let uri = 'http://localhost:8000/recipe/' + id;
                 todo.editing = false;
-                axios.post(uri, todo).then((response) => {
+                axios.post(uri, recipe).then((response) => {
                     console.log(response);
                 }).catch((error) => {
                     console.log(error);
-                })
+                });
+                this.fetchRecipes();
             },
-            deleteTodo(id) { //delete todo item
-                let uri = 'http://localhost:4000/api/delete/' + id;
-                axios.get(uri);
-                this.fetchTodo();
+            deleteRecipe(id) {
+                let uri = 'http://localhost:8000/recipe/' + id;
+                axios.delete(uri);
+                this.fetchRecipes();
             },
             listenToEvents() {
-                bus.$on('refreshTodo', ($event) => {
-                    this.fetchTodo(); // referesh or update todo list on the page
+                bus.$on('reloadRecipes', ($event) => {
+                    this.fetchTodo(); 
                 })
             }
         }

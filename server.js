@@ -12,10 +12,10 @@ app.use(bodyParser.json())
 
 app.use(bodyParser.urlencoded({extended: true}))
 
-var port = config.APP_PORT || 9000
+var port = 9000
 app.listen(port) // Listen on port defined in config file
 
-app.use('/api', routes)
+//app.use('/api', routes)
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect

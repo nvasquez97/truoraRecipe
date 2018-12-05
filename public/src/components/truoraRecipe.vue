@@ -11,14 +11,14 @@
 
 
 <script>
-  import CreateRecipe from './createRecipe.vue';
-  import Recipes from './recipes.vue';
+  import createRecipe from './createRecipe.vue';
+  import recipes from './recipes.vue';
   export default {
     name: 'truoraRecipe',
     data() {
       return {}
     },
-    components: {CreateRecipe,  Recipes},
+    components: {createRecipe,  recipes},
   }
 </script>
 
