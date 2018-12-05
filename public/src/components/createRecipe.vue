@@ -56,7 +56,7 @@
       addRecipe() {
         let url = 'http://localhost:8000/recipe/';
         let param = {
-          name: this.name,,
+          name: this.name,
           imgURL:this.imgURL,
           description:this.description,
           instructions:this.instructions,

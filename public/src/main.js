@@ -1,10 +1,9 @@
 'use strict'
 import Vue from 'vue'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import truoraRecipe from './components/truoraRecipe.vue'
+import truoraRecipe from './components/TruoraRecipe.vue'
 
 new Vue({
-  el: 'app',
+  el: 'truora-recipe',
   created: function () {
     console.log('root instance was created')
   },

@@ -1,8 +1,13 @@
 module.exports = {
 
-  entry: 'public/src/main.js',
+  entry: './public/src/main.js',
   output: {
-    filename: 'public/build/bundle.js'
+    filename: './public/build/bundle.js'
+  },
+  resolve:{
+    alias:{
+      vue:'./vue.js'
+    }
   },
   module: {
     rules: [

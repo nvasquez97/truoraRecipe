@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
+  <div id="truorarecipe">
     <div class="container">
-      <div class="row col-md-6 offset-md-3">
-        <create-recipe></create-recipe>
+      <div class="row col-md-10 offset-md-3">
         <recipes></recipes>
+        <create-recipe></create-recipe>
       </div>
     </div>
   </div>

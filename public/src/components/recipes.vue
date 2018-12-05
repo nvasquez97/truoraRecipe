@@ -31,7 +31,7 @@
                         {recipe.instructions}
                     </div>
                     <div class="col-md-4">
-                        <img class="img-fluid img-thumbnail" v-attr="src: recipe.imgURL"/>
+                        <img class="img-fluid img-thumbnail" :src="recipe.imgURL"/>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
             }
         },
         created: function() {
-            this.fetchRecipe();
+            this.fetchRecipes();
             this.listenToEvents();
         },
         methods: {
