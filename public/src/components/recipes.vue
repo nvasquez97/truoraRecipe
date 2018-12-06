@@ -3,13 +3,13 @@
         <div v-show="recipes.length>0">
             <hr>
             <h3>Mira las recetas:</h3>
-            <div id="accordion">
+            <div id="accordion" class="row">
             <div class="col-md-6" v-for="recipe in recipes">
         <div class="card">
         <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
         <h5 class="mb-0">
             <p><a href="#" style="color:black">
-            {{recipe.name}}
+            {{recipe.name}}: 
             </a>
             {{recipe.description}}
             </p>
@@ -34,6 +34,14 @@
                     </div>
                     <div class="col-md-4">
                         <img class="img-fluid img-thumbnail" :src="recipe.imgURL"/>
+                    </div>
+                    <div class="container">
+                        <button class="btn btn-info" >
+                            Editar receta
+                        </button>
+                        <button class="btn btn-danger" v-on:click="deleteRecipe(recipe.id)">
+                            Eliminar receta
+                        </button>
                     </div>
                 </div>
             </div>
@@ -90,7 +98,7 @@
             },
             listenToEvents() {
                 bus.$on('reloadRecipes', ($event) => {
-                    this.fetchTodo(); 
+                    this.fetchRecipes(); 
                 })
             }
         }

@@ -1,6 +1,11 @@
 <template>
   <div>
     <hr>
+    <button class="btn btn-success" type="button" data-toggle="collapse" href="#anadirReceta">
+      Añadir receta
+    </button>  
+    <br>
+    <div class="collapse multi-collapse" id="anadirReceta">
     <h2>Añade tu propia receta:</h2>
     <form @submit.prevent>
   <div class="container">
@@ -33,10 +38,13 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="button" class="btn btn-primary" data-toggle="collapse" href="#anadirReceta" v-on:click="addRecipe()">
+      Agregar
+      </button>
     </div>
     </form>
     <hr>
+    </div>
   </div>
 </template>
 
@@ -62,10 +70,9 @@
           imgURL:this.imgURL,
           description:this.description,
           instructions:this.instructions,
-          ingredients:this.ingredients,
-          done: 0
+          ingredients:this.ingredients
       };
-        axios.post(url, param, {
+        axios.put(url, param, {
           headers: {
             'Content-Type':'application/json'
             //'Content-Type':'multipart/form-data'
@@ -78,6 +85,8 @@
         }).catch((error) => {
           console.log(error);
         })
+        this.clear();
+        this.refresh();
       },
       clear() {
         this.name = '';

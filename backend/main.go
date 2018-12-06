@@ -1,6 +1,7 @@
 // @author: Nicolas Vasquez Murcia
 package main
 import ("fmt"
+    "time"
 	"log"
     "encoding/json"
 	"database/sql"
@@ -58,6 +59,7 @@ func main() {
     //Exponer servicios y escuchar en el puesto 8000 y permitir CORS para localhost:9000 (Frontend Server)
     log.Fatal(http.ListenAndServe(":8000", 
         handlers.CORS(handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD"}),
+        handlers.AllowedHeaders([]string{"Content-Type"}),
         handlers.AllowedOrigins([]string{"http://localhost:9000"}))(router)))
 }
 /*
@@ -68,7 +70,7 @@ func create(writer http.ResponseWriter, request *http.Request) {
 	_ = json.NewDecoder(request.Body).Decode(&rec)
     fmt.Println(request.Body)
     fmt.Println(request)
-	random:= rand.New(rand.NewSource(999))
+	random:= rand.New(rand.NewSource(time.Now().UnixNano()))
 	rec.Id =random.Intn(999999)
 	var idString = strconv.Itoa(rec.Id)
 	recipes = append(recipes, rec)
