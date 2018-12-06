@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2>Create a Recipe</h2>
+    <hr>
+    <h2>Añade tu propia receta:</h2>
     <form @submit.prevent>
   <div class="container">
       <div class="form-group">
@@ -35,6 +36,7 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </div>
     </form>
+    <hr>
   </div>
 </template>
 
