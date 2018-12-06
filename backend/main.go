@@ -7,6 +7,7 @@ import ("fmt"
 	"net/http"
 	"math/rand"
 	"strconv"
+    "github.com/gorilla/handlers"
 	_"github.com/lib/pq"
     "github.com/gorilla/mux"
 	)
@@ -54,8 +55,10 @@ func main() {
 	router.HandleFunc("/recipe/{id}", update).Methods("POST")
 	router.HandleFunc("/recipe/", create).Methods("PUT")
     router.HandleFunc("/recipe/{id}", deleteR).Methods("DELETE")
-    //Exponer servicios y escuchar en el puesto 8000
-    log.Fatal(http.ListenAndServe(":8000", router))
+    //Exponer servicios y escuchar en el puesto 8000 y permitir CORS para localhost:9000 (Frontend Server)
+    log.Fatal(http.ListenAndServe(":8000", 
+        handlers.CORS(handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD"}),
+        handlers.AllowedOrigins([]string{"http://localhost:9000"}))(router)))
 }
 /*
 *Metodo para realizar PUT de una nueva receta
@@ -185,7 +188,6 @@ func search(writer http.ResponseWriter, request *http.Request) {
         }
         var rec = Recipe{Id: id, Name:name, ImgURL: imgURL, Description:description, Ingredients:ingredients, Instructions:instructions}
         recipes=append(recipes, rec)
-        fmt.Println(rec)
     }
     json.NewEncoder(writer).Encode(recipes)
 }

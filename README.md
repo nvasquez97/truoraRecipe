@@ -21,7 +21,7 @@ GRANT ALL ON DATABASE COOK TO TRUORA
 
 #### Ejecutar el backend desarrollado en go
 ```
-go run main.go
+go run ./backend/main.go
 ```
 
 ## Instalar y correr el Frontend

@@ -1,3 +1,5 @@
+//https://github.com/abiodunjames/NodeJs-Todo-List
+
 'use strict'
 
 var express = require('express')
@@ -13,13 +15,13 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 var port = 9000
-app.listen(port) // Listen on port defined in config file
+
 
 //app.use('/api', routes)
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:' + port)
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9000')
 
     // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
@@ -30,7 +32,8 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
   next()
 })
-// Server index.html page when request to the root is made
+app.listen(port) // Listen on port defined in config file
+
 app.get('/', function (req, res, next) {
   res.sendfile('./public/index.html')
 })
