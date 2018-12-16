@@ -7,7 +7,7 @@ CRUD de recetas utilizando Golang, CrockroachDB para el backend y VueJS con boot
 
 Iniciar un cluster de CockRoachDB:
 
-```console
+```shell-script
 cockroach start --insecure --listen-addr=localhost
 ```
 
