@@ -7,7 +7,7 @@ CRUD de recetas utilizando Golang, CrockroachDB para el backend y VueJS con boot
 
 Iniciar un cluster de CockRoachDB:
 
-```sh
+```console
 cockroach start --insecure --listen-addr=localhost
 ```
 
@@ -18,9 +18,9 @@ cockroach sql --insecure --host=localhost:26257
 Crear una base de datos llamada cook, un usuario llamado truora y darle acceso al usuario a la base de datos:
 
 ```sql
-CREATE DATABASE COOK
-CREATE USER TRUORA
-GRANT ALL ON DATABASE COOK TO TRUORA
+CREATE DATABASE COOK;
+CREATE USER TRUORA;
+GRANT ALL ON DATABASE COOK TO TRUORA;
 ```
 
 #### Ejecutar el backend desarrollado en go
