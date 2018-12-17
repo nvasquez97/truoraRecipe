@@ -6,7 +6,7 @@
             <div id="accordion" class="row">
             <div class="col-md-6" v-for="recipe in recipes">
         <div class="card">
-        <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+        <div class="card-header" id="headingOne" data-toggle="collapse" v-bind:data-target="'#'+recipe.id" aria-expanded="true" aria-controls="collapseOne" >
         <h5 class="mb-0">
             <p><a href="#" style="color:black">
             {{recipe.name}}: 
@@ -16,7 +16,7 @@
         </h5>
         </div>
 
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div v-bind:id="recipe.id" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-8">
@@ -36,7 +36,7 @@
                         <img class="img-fluid img-thumbnail" :src="recipe.imgURL"/>
                     </div>
                     <div class="container">
-                        <button class="btn btn-info" >
+                        <button class="btn btn-info" v-on:click="updateRecipe(recipe)">
                             Editar receta
                         </button>
                         <button class="btn btn-danger" v-on:click="deleteRecipe(recipe.id)">
@@ -49,19 +49,22 @@
     </div>
     </div>
         </div>
+    </div>
+    <div v-show="recipes.length==0">
+        <hr>
         <div class="row alert alert-info text-center" v-show="recipes.length==0">
-            <p class="alert alert-info">
-              <strong>No tienes recetas aún</strong>
-            <br/>
-            ¡Agrega una!</p>
+            <h3 class="alert alert-info">
+                No hay recetas aún, ¡agrega una!
+            </h3>
         </div>
+        
     </div>
 </div>
 </template>
 
 <script>
     import axios from 'axios';
-    import bus from './../bus.js'
+    import bus from './../bus.js';
 
     export default {
         data() {
@@ -77,7 +80,14 @@
             fetchRecipes() {
                 let uri = 'http://localhost:8000/recipes/';
                 axios.get(uri).then((response) => {
-                    this.recipes = response.data;
+                    if(response.data !== "No hay recetas en el momento")
+                    {
+                        this.recipes = response.data;    
+                    }
+                    else
+                    {
+                        this.recipes = [];
+                    }
                 });
             },
             updateRecipe(recipe) {
@@ -86,15 +96,18 @@
                 todo.editing = false;
                 axios.post(uri, recipe).then((response) => {
                     console.log(response);
+                    this.fetchRecipes();
                 }).catch((error) => {
                     console.log(error);
+                    this.fetchRecipes();
                 });
-                this.fetchRecipes();
+                
             },
             deleteRecipe(id) {
                 let uri = 'http://localhost:8000/recipe/' + id;
-                axios.delete(uri);
-                this.fetchRecipes();
+                axios.delete(uri).then((response)=>{
+                    this.fetchRecipes();
+                });
             },
             listenToEvents() {
                 bus.$on('reloadRecipes', ($event) => {

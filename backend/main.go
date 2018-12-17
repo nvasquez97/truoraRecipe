@@ -58,7 +58,7 @@ func main() {
     router.HandleFunc("/recipe/{id}", deleteR).Methods("DELETE")
     //Exponer servicios y escuchar en el puesto 8000 y permitir CORS para localhost:9000 (Frontend Server)
     log.Fatal(http.ListenAndServe(":8000", 
-        handlers.CORS(handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD"}),
+        handlers.CORS(handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "DELETE"}),
         handlers.AllowedHeaders([]string{"Content-Type"}),
         handlers.AllowedOrigins([]string{"http://localhost:9000"}))(router)))
 }
@@ -200,9 +200,8 @@ func search(writer http.ResponseWriter, request *http.Request) {
 func deleteR(writer http.ResponseWriter, request *http.Request) {
 	param:=mux.Vars(request)
 	idD:= param["id"]
-
 	if _, err := dbCKDB.Exec(
-        "Delete * from Cook.Recipes where id ="+idD); err != nil {
+        "Delete from Cook.Recipes where id="+idD); err != nil {
         log.Fatal(err)
     }
     json.NewEncoder(writer).Encode(recipes)
