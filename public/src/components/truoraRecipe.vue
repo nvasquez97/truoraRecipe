@@ -1,19 +1,20 @@
 <template>
   <div id="truorarecipe">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="collapse navbar-collapse container">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-              <a class="navbar-brand" href="#">Nicolás Vásquez Murcia</a>
-          </li>
-        </ul>
-        <br>
-        <form class="form-inline">
-          <input class="form-control" type="search" placeholder="Busca tu receta" aria-label="Search" v-model="search">
-          <button class="btn btn-outline-info my-2 my-sm-0" type="submit" v-on:click="searchRecipe">TruoraRecipe</button>
-        </form>
-      </div>
-    </nav>
+    <b-navbar toggleable="lg" type="dark" variant="dark">
+      <b-container>
+        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+        <b-navbar-brand href="#">Nicolás Vásquez Murcia</b-navbar-brand>
+        <b-collapse is-nav id="nav_collapse">
+          <!-- Right aligned nav items -->
+          <b-navbar-nav class="ml-auto">
+            <b-nav-form>
+              <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Busca tu receta"/>
+              <b-button size="sm" class="my-2 my-sm-0" type="submit" variant="outline-info" v-on:click="searchRecipe">TruoraRecipe</b-button>
+            </b-nav-form>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-container>
+    </b-navbar>
     <div class="container">
         <recipes></recipes>
         <create-recipe></create-recipe>
