@@ -1,8 +1,32 @@
 <template>
     <div>
-        <div v-show="recipes.length>0">
+        <div v-show="noBusqueda">
+        <hr>
+        <h3 v-show="recipes.length>0">Mira las recetas:</h3>
+            <div class="row alert alert-info text-center" v-show="recipes.length==0">
+                <h3 class="alert alert-info">
+                    No hay recetas aún, ¡agrega una!
+                </h3>
+            </div>
+        </div>
+
+        <div v-show="!noBusqueda">
             <hr>
-            <h3>Mira las recetas:</h3>
+            <div class="row text-center">
+                <h3 v-show="recipes.length==0" class="alert alert-info">
+                    No hay recetas que coincidan con "{{search}}"
+                </h3>
+                <h3 v-show="recipes.length>0" class="alert alert-info">
+                    Mira las recetas que coinciden con "{{search}}"
+                </h3>
+            </div>
+            <button class="btn btn-dark" v-on:click="fetchRecipes()">
+                    Mostrar todas
+            </button>
+        </div>
+
+        <div v-show="recipes.length>0">
+            
             <div id="accordion" class="row">
             <div class="col-md-6" v-for="recipe in recipes">
         <div class="card">
@@ -50,15 +74,7 @@
     </div>
         </div>
     </div>
-    <div v-show="recipes.length==0">
-        <hr>
-        <div class="row alert alert-info text-center" v-show="recipes.length==0">
-            <h3 class="alert alert-info">
-                No hay recetas aún, ¡agrega una!
-            </h3>
-        </div>
-        
-    </div>
+    
 </div>
 </template>
 
@@ -69,7 +85,9 @@
     export default {
         data() {
             return {
-                recipes: []
+                recipes: [],
+                noBusqueda:true,
+                search:''
             }
         },
         created: function() {
@@ -79,6 +97,7 @@
         methods: {
             fetchRecipes() {
                 let uri = 'http://localhost:8000/recipes/';
+                this.noBusqueda=true;
                 axios.get(uri).then((response) => {
                     if(response.data !== "No hay recetas en el momento")
                     {
@@ -90,7 +109,24 @@
                     }
                 });
             },
+            searchRecipes(name){
+                let uri = 'http://localhost:8000/search/'+name;
+                console.log(name);
+                this.noBusqueda=false;
+                this.search=name;
+                axios.get(uri).then((response)=>{
+                    if(response.data !== "No hay recetas con ese nombre")
+                    {
+                        this.recipes = response.data;    
+                    }
+                    else
+                    {
+                        this.recipes = [];
+                    }
+                });
+            },
             updateRecipe(recipe) {
+                this.noBusqueda=true;
                 let id = recipe._id;
                 let uri = 'http://localhost:8000/recipe/' + id;
                 todo.editing = false;
@@ -101,9 +137,9 @@
                     console.log(error);
                     this.fetchRecipes();
                 });
-                
             },
             deleteRecipe(id) {
+                this.noBusqueda=true;
                 let uri = 'http://localhost:8000/recipe/' + id;
                 axios.delete(uri).then((response)=>{
                     this.fetchRecipes();
@@ -112,7 +148,11 @@
             listenToEvents() {
                 bus.$on('reloadRecipes', ($event) => {
                     this.fetchRecipes(); 
-                })
+                });
+                bus.$on('search', (name)=> {
+                    console.log("Pasa");
+                    this.searchRecipes(name);
+                });
             }
         }
     }

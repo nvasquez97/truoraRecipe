@@ -9,8 +9,8 @@
         </ul>
         <br>
         <form class="form-inline">
-          <input class="form-control" type="search" placeholder="Busca tu receta" aria-label="Search">
-          <button class="btn btn-outline-info my-2 my-sm-0" type="submit">TruoraRecipe</button>
+          <input class="form-control" type="search" placeholder="Busca tu receta" aria-label="Search" v-model="search">
+          <button class="btn btn-outline-info my-2 my-sm-0" type="submit" v-on:click="searchRecipe">TruoraRecipe</button>
         </form>
       </div>
     </nav>
@@ -25,12 +25,26 @@
 <script>
   import createRecipe from './createRecipe.vue';
   import recipes from './recipes.vue';
+  import bus from "./../bus.js";
   export default {
     name: 'truoraRecipe',
     data() {
-      return {}
+      return {
+        search:'',
+      }
     },
     components: {createRecipe,  recipes},
+    methods: {
+      searchRecipe:function(event){
+        //Evita que se realice el submit del form
+        event.preventDefault();
+        if(this.search!=="")
+        {
+          bus.$emit("search",this.search);
+          this.search="";
+        }
+      },
+    }
   }
 </script>
 

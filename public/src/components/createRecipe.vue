@@ -5,6 +5,8 @@
       Añadir receta
     </button>  
     <br>
+    <br>
+    <br>
     <div class="collapse multi-collapse" id="anadirReceta">
     <h2>Añade tu propia receta:</h2>
     <form @submit.prevent>

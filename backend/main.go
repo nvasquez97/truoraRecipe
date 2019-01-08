@@ -62,6 +62,7 @@ func main() {
         handlers.AllowedHeaders([]string{"Content-Type"}),
         handlers.AllowedOrigins([]string{"http://localhost:9000"}))(router)))
 }
+
 /*
 *Metodo para realizar PUT de una nueva receta
 */
@@ -107,8 +108,6 @@ func update(writer http.ResponseWriter, request *http.Request) {
         }
         json.NewEncoder(writer).Encode(rec)    
     } else {
-        rec = Recipe{Id: 1, Name:"Hello", ImgURL: "URL", Description:"description", Ingredients:"ingredients", Instructions:"instructions"}
-        //json.NewEncoder(writer).Encode(rec)
         writer.WriteHeader(http.StatusInternalServerError)
         writer.Write([]byte("Hubo un error actualizando la receta porque los datos están vacíos"))
     }
@@ -185,13 +184,17 @@ func search(writer http.ResponseWriter, request *http.Request) {
     for rows.Next() {
         var id int
         var imgURL,name, description,ingredients, instructions string
-        if err := rows.Scan(&id, &imgURL, &name, &description, &ingredients, &instructions); err != nil {
+        if err := rows.Scan(&id, &name, &imgURL, &description, &ingredients, &instructions); err != nil {
             log.Fatal(err)
         }
         var rec = Recipe{Id: id, Name:name, ImgURL: imgURL, Description:description, Ingredients:ingredients, Instructions:instructions}
         recipes=append(recipes, rec)
     }
-    json.NewEncoder(writer).Encode(recipes)
+    if recipes != nil {
+        json.NewEncoder(writer).Encode(recipes)
+    } else {
+        writer.Write([]byte("No hay recetas con ese nombre"))
+    }
 }
 
 /*
