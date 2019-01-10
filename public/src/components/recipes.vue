@@ -31,9 +31,16 @@
 
         <div v-show="recipes.length>0">
             <b-row id="accordion">
-                <b-col cols="6" v-for="recipe in recipes">
+                <b-col md="6" v-for="recipe in recipes">
                     <b-card no-body class="mb-1">
-                        <b-card-header header-tag="header" class="p-1" role="tab">
+                        <b-card-header v-show="idEditar!==recipe.id" header-tag="header" class="p-1" role="tab">
+                            <b-container>
+                                <h5 href="#" v-b-toggle="'accordion'+recipe.id">
+                                    {{recipe.name}}: {{recipe.description}}
+                                </h5>
+                            </b-container>
+                        </b-card-header>
+                        <b-card-header v-show="idEditar===recipe.id" header-tag="header" class="p-1" role="tab">
                             <b-container>
                                 <h5 href="#" v-b-toggle="'accordion'+recipe.id">
                                     {{recipe.name}}: {{recipe.description}}
@@ -43,7 +50,7 @@
                         <b-collapse v-bind:id="'accordion'+recipe.id" visible accordion="my-accordion" role="tabpanel">
                             <b-card-body v-show="idEditar!==recipe.id">
                                 <b-row>
-                                    <b-col cols="8">
+                                    <b-col md="8">
                                         <h6>
                                             Ingredientes:
                                         </h6>
@@ -58,7 +65,7 @@
                                         </p>
                                         <hr>
                                     </b-col>
-                                    <b-col cols="4">
+                                    <b-col md="4">
                                         <b-img center fluid thumbnail v-bind:src="recipe.imgURL"/>
                                     </b-col>
                                     <hr>

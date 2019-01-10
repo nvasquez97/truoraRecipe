@@ -14,13 +14,13 @@
         <b-container>
           <b-form-group>
             <b-row>
-                <b-col cols="4">
+                <b-col md="4">
                   <label for="inputName">
                     Nombre
                   </label>
                   <b-input id="inputName" type="text" placeholder="Escribe el nombre de la receta" v-model="name"/>
                 </b-col>
-                <b-col cols="8">
+                <b-col md="8">
                   <label for="inputURL">
                     Imagen
                   </label>
@@ -28,7 +28,7 @@
                 </b-col>
             </b-row>
             <b-form-row>
-              <b-col cols="12">
+              <b-col md="12">
                 <label for="inputName">
                   Describe tu plato
                 </label>
@@ -36,13 +36,13 @@
               </b-col>
             </b-form-row>
             <b-form-row>
-                <b-col cols="6">
+                <b-col md="6">
                   <label for="inputInstructions">
                     Instrucciones
                   </label>
                   <b-input id="inputInstructions" type="text" class="form-control" placeholder="Escribe cómo se prepara tu receta" v-model="instructions"/>
                 </b-col>
-                <b-col cols="6">
+                <b-col md="6">
                   <label for="inputIngredients">
                     Ingredientes
                   </label>
