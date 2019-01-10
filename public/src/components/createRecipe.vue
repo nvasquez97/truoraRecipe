@@ -1,52 +1,62 @@
 <template>
   <div>
     <hr>
-    <button class="btn btn-success" type="button" data-toggle="collapse" href="#anadirReceta">
+    <b-button variant="success" v-b-toggle.anadirReceta>
       Añadir receta
-    </button>  
+    </b-button>
     <br>
     <br>
-    <br>
-    <div class="collapse multi-collapse" id="anadirReceta">
-    <h2>Añade tu propia receta:</h2>
-    <form @submit.prevent>
-  <div class="container">
-      <div class="form-group">
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="inputName">Nombre</label>
-            <input id="inputName" type="text" class="form-control" placeholder="Escribe el nombre de la receta" v-model="name">
-          </div>
-          <div class="form-group col-md-8">
-            <label for="inputURL">Imagen</label>
-            <input id="inputURL" type="text" class="form-control" placeholder="Pega acá el URL de una imagen que te guste" v-model="imgURL">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-12">
-              <label for="inputName">Describe tu plato</label>
-            <input id="inputName" type="text" class="form-control" placeholder="Escribe una descripción del plato que se prepara en tu receta" v-model="description">
-            </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputInstructions">Instrucciones</label>
-            <input id="inputInstructions" type="text" class="form-control" placeholder="Escribe cómo se prepara tu receta" v-model="instructions">
-          </div>
-          <div class="form-group col-md-6">
-            <label for="inputIngredients">Ingredientes</label>
-            <input id="inputIngredients" type="text" class="form-control" placeholder="Escribe los ingredientes separados por comas"
-            v-model="ingredients">
-          </div>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary" data-toggle="collapse" href="#anadirReceta" v-on:click="addRecipe()">
-      Agregar
-      </button>
-    </div>
-    </form>
+    <b-collapse id="anadirReceta">
+      <h2>
+        Añade tu propia receta:
+      </h2>
+      <b-form @submit.prevent>
+        <b-container>
+          <b-form-group>
+            <b-row>
+                <b-col cols="4">
+                  <label for="inputName">
+                    Nombre
+                  </label>
+                  <b-input id="inputName" type="text" placeholder="Escribe el nombre de la receta" v-model="name"/>
+                </b-col>
+                <b-col cols="8">
+                  <label for="inputURL">
+                    Imagen
+                  </label>
+                  <b-input id="inputURL" type="text" placeholder="Pega acá el URL de una imagen que te guste" v-model="imgURL"/>
+                </b-col>
+            </b-row>
+            <b-form-row>
+              <b-col cols="12">
+                <label for="inputName">
+                  Describe tu plato
+                </label>
+                <b-input id="inputName" type="text" placeholder="Escribe una descripción del plato que se prepara en tu receta" v-model="description"/>
+              </b-col>
+            </b-form-row>
+            <b-form-row>
+                <b-col cols="6">
+                  <label for="inputInstructions">
+                    Instrucciones
+                  </label>
+                  <b-input id="inputInstructions" type="text" class="form-control" placeholder="Escribe cómo se prepara tu receta" v-model="instructions"/>
+                </b-col>
+                <b-col cols="6">
+                  <label for="inputIngredients">
+                    Ingredientes
+                  </label>
+                  <b-input id="inputIngredients" type="text" class="form-control" placeholder="Escribe los ingredientes separados por comas" v-model="ingredients"/>
+                </b-col>
+            </b-form-row>
+          </b-form-group>
+          <button type="button" class="btn btn-primary" data-toggle="collapse" href="#anadirReceta" v-on:click="addRecipe()">
+            Agregar
+          </button>
+        </b-container>
+      </b-form>
     <hr>
-    </div>
+    </b-collapse>
   </div>
 </template>
 

@@ -25,6 +25,7 @@
                 <b-button type="dark" v-on:click="fetchRecipes()">
                     Mostrar todas
                 </b-button>
+                <hr>
             </b-container>
         </div>
 
