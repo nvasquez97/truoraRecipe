@@ -76,7 +76,6 @@ func create(writer http.ResponseWriter, request *http.Request) {
 	var idString = strconv.Itoa(rec.Id)
 	recipes = append(recipes, rec)
 	
-	// Insert two rows into the "accounts" table.
     if rec.Name != ""{
         if _, err := dbCKDB.Exec(
         "INSERT INTO Cook.Recipes VALUES ("+idString+",'"+rec.Name+"','"+rec.ImgURL+"','"+rec.Description+"','"+rec.Ingredients+"','"+rec.Instructions+"')"); err != nil {

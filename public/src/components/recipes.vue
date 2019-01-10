@@ -33,7 +33,7 @@
             <b-row id="accordion">
                 <b-col md="6" v-for="recipe in recipes">
                     <b-card no-body class="mb-1">
-                        <b-card-header v-show="idEditar!==recipe.id" header-tag="header" class="p-1" role="tab">
+                        <b-card-header v-show="idEditar!==recipe.id" header-tag="header" class="p-1" role="tab" v-on:click="reviewHeaderClick()">
                             <b-container>
                                 <h5 href="#" v-b-toggle="'accordion'+recipe.id">
                                     {{recipe.name}}: {{recipe.description}}
@@ -42,9 +42,20 @@
                         </b-card-header>
                         <b-card-header v-show="idEditar===recipe.id" header-tag="header" class="p-1" role="tab">
                             <b-container>
-                                <h5 href="#" v-b-toggle="'accordion'+recipe.id">
-                                    {{recipe.name}}: {{recipe.description}}
-                                </h5>
+                                <b-row>
+                                    <b-col cols="6">
+                                        <label for="recipeName">
+                                            Editar Nombre:
+                                        </label>
+                                        <b-input id="recipeName" v-bind:placeHolder="recipe.name" v-model="name"/>
+                                    </b-col>
+                                    <b-col cols="6">
+                                        <label for="recipeDescription">
+                                            Editar Descripción:
+                                        </label>
+                                        <b-input id="recipeDescription" v-bind:placeholder="recipe.description" v-model="description"/>
+                                    </b-col>
+                                </b-row>
                             </b-container>
                         </b-card-header>
                         <b-collapse v-bind:id="'accordion'+recipe.id" visible accordion="my-accordion" role="tabpanel">
@@ -71,39 +82,39 @@
                                     <hr>
                                     <b-container>
                                         <b-button variant="primary" v-on:click="updateSpecificRecipe(recipe)"> 
-                                        Editar receta
-                                    </b-button>
-                                    <b-button variant="danger" v-on:click="deleteRecipe(recipe.id)">
-                                        Eliminar receta
-                                    </b-button>
+                                            Editar receta
+                                        </b-button>
+                                        <b-button variant="danger" v-on:click="deleteRecipe(recipe.id)">
+                                            Eliminar receta
+                                        </b-button>
                                     </b-container>
                                 </b-row>
                             </b-card-body>
                             <b-card-body v-show="idEditar===recipe.id">
                                 <b-row>
-                                    <b-col cols="8">
+                                    <b-container>
                                         <h6>
                                             Editar ingredientes:
                                         </h6>
-                                        <p class="card-text">
-                                            {{recipe.ingredients}}
-                                        </p>
+                                        <b-input v-bind:placeholder="recipe.ingredients" v-model="ingredients"/>
                                         <h6>
                                             Editar instrucciones:
                                         </h6>
-                                        <p class="card-text">
-                                        {{ recipe.instructions }}
-                                        </p>
+                                        <b-input v-bind:placeholder="recipe.instructions" v-model="instructions"/>
+                                        <h6>
+                                            Editar imagen:
+                                        </h6>
+                                        <b-input v-bind:placeholder="recipe.imgURL" v-model="imgURL"/>
                                         <hr>
-                                    </b-col>
-                                    <b-col cols="4">
-                                        <b-img center fluid thumbnail v-bind:src="recipe.imgURL"/>
-                                    </b-col>
+                                    </b-container>
                                     <hr>
                                     <b-container>
                                         <b-button variant="primary" v-on:click="updateRecipe(recipe)"> 
-                                        Actualizar receta
-                                    </b-button>
+                                            Actualizar receta
+                                        </b-button>
+                                        <b-button variant="danger" v-on:click="cancelEdit()"> 
+                                            Cancelar
+                                        </b-button>
                                     </b-container>
                                 </b-row>
                             </b-card-body>
@@ -125,7 +136,12 @@
                 recipes: [],
                 noBusqueda:true,
                 search:'',
-                idEditar:0
+                idEditar:0,
+                name:'',
+                description:'',
+                instructions:'',
+                imgURL:'',
+                ingredients:''
             }
         },
         created: function() {
@@ -164,18 +180,24 @@
                 });
             },
             updateRecipe(recipe) {
+                console.log(recipe);
                 this.noBusqueda=true;
-                this.idEditar=0; 
-                let id = recipe._id;
-                let uri = 'http://localhost:8000/recipe/' + id;
-                todo.editing = false;
-                axios.post(uri, recipe).then((response) => {
+                let uri = 'http://localhost:8000/recipe/' + recipe.id;
+                let nameU = this.name==="" ? recipe.name : this.name;
+                let imgURLU = this.imgURL==="" ? recipe.imgURL : this.imgURL;
+                let descriptionU = this.description==="" ? recipe.description : this.description;
+                let ingredientsU = this.ingredients==="" ? recipe.ingredients : this.ingredients;
+                let instructionsU = this.instructions==="" ? recipe.instructions : this.instructions;
+                let recipeU = {name:nameU, imgURL:imgURLU, description:descriptionU, ingredients:ingredientsU,instructions:instructionsU};
+                console.log(recipeU);
+                axios.post(uri, recipeU).then((response) => {
                     console.log(response);
                     this.fetchRecipes();
                 }).catch((error) => {
                     console.log(error);
                     this.fetchRecipes();
                 });
+                this.cancelEdit();
             },
             deleteRecipe(id) {
                 this.noBusqueda=true;
@@ -196,7 +218,22 @@
             updateSpecificRecipe(recipe)
             {
                 this.idEditar = recipe.id;
-
+            },
+            cancelEdit()
+            {
+                this.idEditar=0;
+                this.name="";
+                this.description="";
+                this.instructions="";
+                this.imgURL="";
+                this.ingredients="";
+            },
+            reviewHeaderClick()
+            {
+                if(this.idEditar !== 0)
+                {
+                    this.cancelEdit();
+                }
             }
         }
     }
