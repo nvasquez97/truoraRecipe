@@ -44,7 +44,7 @@ func main() {
     // Crear la tabla de recetas
     if _, err := db.Exec(
         "create table if not exists Cook.Recipes(id INT PRIMARY KEY, name STRING, imgURL STRING, description STRING, ingredients STRING, instructions STRING)"); err != nil {
-        fmt.Println("FAIL")
+        fmt.Println("FAIL CREATING TABLE")
         log.Fatal(err)
     }
 
@@ -69,8 +69,6 @@ func main() {
 func create(writer http.ResponseWriter, request *http.Request) {
 	var rec Recipe
 	_ = json.NewDecoder(request.Body).Decode(&rec)
-    fmt.Println(request.Body)
-    fmt.Println(request)
 	random:= rand.New(rand.NewSource(time.Now().UnixNano()))
 	rec.Id =random.Intn(999999)
 	var idString = strconv.Itoa(rec.Id)
