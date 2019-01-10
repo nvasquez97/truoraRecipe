@@ -150,6 +150,7 @@
         },
         methods: {
             fetchRecipes() {
+                this.recipes = [];
                 let uri = 'http://localhost:8000/recipes/';
                 this.noBusqueda=true;
                 axios.get(uri).then((response) => {
@@ -164,8 +165,8 @@
                 });
             },
             searchRecipes(name){
+                this.recipes = [];
                 let uri = 'http://localhost:8000/search/'+name;
-                console.log(name);
                 this.noBusqueda=false;
                 this.search=name;
                 axios.get(uri).then((response)=>{
@@ -180,7 +181,6 @@
                 });
             },
             updateRecipe(recipe) {
-                console.log(recipe);
                 this.noBusqueda=true;
                 let uri = 'http://localhost:8000/recipe/' + recipe.id;
                 let nameU = this.name==="" ? recipe.name : this.name;
@@ -189,9 +189,7 @@
                 let ingredientsU = this.ingredients==="" ? recipe.ingredients : this.ingredients;
                 let instructionsU = this.instructions==="" ? recipe.instructions : this.instructions;
                 let recipeU = {name:nameU, imgURL:imgURLU, description:descriptionU, ingredients:ingredientsU,instructions:instructionsU};
-                console.log(recipeU);
                 axios.post(uri, recipeU).then((response) => {
-                    console.log(response);
                     this.fetchRecipes();
                 }).catch((error) => {
                     console.log(error);
@@ -211,7 +209,6 @@
                     this.fetchRecipes(); 
                 });
                 bus.$on('search', (name)=> {
-                    console.log("Pasa");
                     this.searchRecipes(name);
                 });
             },

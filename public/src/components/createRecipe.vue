@@ -90,10 +90,8 @@
             //'Content-Type':'multipart/form-data'
           }
         }).then((response) => {
-          console.log(response);
           this.clear();
           this.refresh();
-          this.typing = false;
         }).catch((error) => {
           console.log(error);
         })
